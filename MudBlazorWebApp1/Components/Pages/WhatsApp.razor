@@ -1,0 +1,230 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Components
+
+@page "/whatsapp"
+
+<MudAppBar Elevation="1">
+    <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
+    <MudSpacer />
+    <MudAppBarSpacer />
+    <MudText Typo="Typo.h6" Class="ml-3">Conversas</MudText>
+    <MudSpacer />
+    <MudIconButton Icon="Icons.Material.Filled.CameraAlt" Color="Color.Inherit" />
+    <MudIconButton Icon="Icons.Material.Filled.Search" Color="Color.Inherit" />
+    <MudIconButton Icon="Icons.Material.Filled.MoreVert" Color="Color.Inherit" />
+</MudAppBar>
+
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="pa-0">
+        <!-- Filtros -->
+        <MudGrid Class="pa-4">
+            <MudItem xs="12">
+                <MudChipSet T="string" Filter>
+                    <MudChip T="string" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">Todas</MudChip>
+                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Não lidas</MudChip>
+                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Favoritos</MudChip>
+                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Grupos</MudChip>
+                </MudChipSet>
+            </MudItem>
+        </MudGrid>
+
+        <!-- Conversas Arquivadas -->
+        <MudListItem T="string" @onclick="() => HandleArchivedClick()">
+            <MudIcon Icon="Icons.Material.Filled.Archive" Color="Color.Default" />
+            <MudText Class="ml-3">Arquivadas</MudText>
+            <MudSpacer />
+            <MudBadge Color="Color.Primary" Size="Size.Small">66</MudBadge>
+        </MudListItem>
+
+        <MudDivider />
+
+        <!-- Lista de Conversas -->
+        <MudList T="User" Class="pa-0" Style="height: calc(100vh - 200px); overflow-y: auto;">
+            @foreach (var user in Users)
+            {
+                <MudListItem @onclick="() => HandleUserClick(user)">
+                    <MudAvatar Color="Color.Primary" Size="Size.Large" Class="mr-3">
+                        @GetInitials(user.Phone)
+                    </MudAvatar>
+                    <MudListItemContent>
+                        <MudListItemTitle>@user.Phone</MudListItemTitle>
+                        <MudListItemSubTitle>
+                            <MudIcon Icon="Icons.Material.Filled.DoneAll" Size="Size.Small" Class="mr-1" Color="Color.Primary" />
+                            @user.LastMessage
+                        </MudListItemSubTitle>
+                    </MudListItemContent>
+                    <MudListItemSecondaryContent>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">
+                            @GetFormattedDate(user.LastMessageDate)
+                        </MudText>
+                    </MudListItemSecondaryContent>
+                </MudListItem>
+                <MudDivider />
+            }
+        </MudList>
+
+        <!-- Botão Nova Conversa -->
+        <MudFab Color="Color.Primary" 
+                Size="Size.Large" 
+                Class="fab-bottom-right"
+                Icon="Icons.Material.Filled.Chat">
+        </MudFab>
+    </MudContainer>
+</MudMainContent>
+
+<!-- Menu Inferior -->
+<MudBottomNavigation Breakpoint="Breakpoint.None" 
+                     Color="Color.Primary" 
+                     Border="true" 
+                     Class="elevation-2">
+    
+    <!-- Atualizações -->
+    <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
+                      IconColor="Color.Default"
+                      Title="Atualizações" />
+    
+    <!-- Ligações -->
+    <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
+                      IconColor="Color.Default"
+                      Title="Ligações" />
+    
+    <!-- Comunidades -->
+    <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
+                      IconColor="Color.Default"
+                      Title="Comunidades" />
+    
+    <!-- Conversas -->
+    <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
+                      IconColor="Color.Primary"
+                      Title="Conversas" />
+    
+    <!-- Configurações -->
+    <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
+                      IconColor="Color.Default"
+                      Title="Configurações" />
+
+</MudBottomNavigation>
+
+@code {
+    private List<User> Users = new List<User>();
+
+    protected override void OnInitialized()
+    {
+        GenerateFakeUsers();
+    }
+
+    private void GenerateFakeUsers()
+    {
+        // Dados fake conforme o print
+        Users.Add(new User 
+        { 
+            Id = 1, 
+            Phone = "Khalil Dev", 
+            LastMessage = "yy3-97f-d5p-Ca7",
+            LastMessageDate = DateTime.Now.AddDays(-1)
+        });
+
+        Users.Add(new User 
+        { 
+            Id = 2, 
+            Phone = "Khalil PLO5", 
+            LastMessage = "Teoria 3 H + 2 L",
+            LastMessageDate = new DateTime(2025, 11, 18)
+        });
+
+        Users.Add(new User 
+        { 
+            Id = 3, 
+            Phone = "Khalil IA's", 
+            LastMessage = "https://chat.whatsapp.com/GNQjOSxPsqn8...",
+            LastMessageDate = new DateTime(2025, 11, 16)
+        });
+
+        Users.Add(new User 
+        { 
+            Id = 4, 
+            Phone = "Canal de cortes", 
+            LastMessage = "https://www.instagram.com/reeI/DMly-czxNUG/?igsh=NGVjZmR...",
+            LastMessageDate = new DateTime(2025, 8, 5)
+        });
+
+        // // Adicionar mais usuários para testar o scroll
+        // for (int i = 5; i <= 20; i++)
+        // {
+        //     Users.Add(new User 
+        //     { 
+        //         Id = i, 
+        //         Phone = $"Contato {i}", 
+        //         LastMessage = $"Mensagem de exemplo {i}",
+        //         LastMessageDate = DateTime.Now.AddDays(-i)
+        //     });
+        // }
+    }
+
+    private string GetInitials(string phone)
+    {
+        if (string.IsNullOrEmpty(phone))
+            return "??";
+        
+        var parts = phone.Split(' ');
+        if (parts.Length >= 2)
+            return $"{parts[0][0]}{parts[1][0]}".ToUpper();
+        
+        return phone.Length >= 2 ? phone.Substring(0, 2).ToUpper() : phone.ToUpper();
+    }
+
+    private string GetFormattedDate(DateTime date)
+    {
+        var today = DateTime.Today;
+        var yesterday = today.AddDays(-1);
+
+        if (date.Date == today)
+            return date.ToString("HH:mm");
+        else if (date.Date == yesterday)
+            return "ontem";
+        else if (date.Year == today.Year)
+            return date.ToString("dd/MM");
+        else
+            return date.ToString("dd/MM/yyyy");
+    }
+
+    private void HandleArchivedClick()
+    {
+        // Lógica para abrir conversas arquivadas
+    }
+
+    private void HandleUserClick(User user)
+    {
+        // Lógica para abrir conversa com o usuário
+    }
+
+    public class User
+    {
+        public int Id { get; set; }
+        public string Phone { get; set; } = string.Empty;
+        public string LastMessage { get; set; } = string.Empty;
+        public DateTime LastMessageDate { get; set; }
+    }
+}
+
+<style>
+.fab-bottom-right {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+.mud-list {
+    scroll-behavior: smooth;
+}
+
+.mud-list-item-content {
+    min-width: 0;
+}
+
+.mud-list-item-secondary-content {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+</style>
