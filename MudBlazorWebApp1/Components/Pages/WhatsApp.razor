@@ -3,33 +3,35 @@
 
 @page "/whatsapp"
 
-<MudAppBar Elevation="1">
-    <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
-    <MudSpacer />
-    <MudAppBarSpacer />
-    <MudText Typo="Typo.h6" Class="ml-3">Conversas</MudText>
-    <MudSpacer />
-    <MudIconButton Icon="Icons.Material.Filled.CameraAlt" Color="Color.Inherit" />
-    <MudIconButton Icon="Icons.Material.Filled.Search" Color="Color.Inherit" />
-    <MudIconButton Icon="Icons.Material.Filled.MoreVert" Color="Color.Inherit" />
-</MudAppBar>
+<div class="whatsapp-page">
+    <MudAppBar Elevation="1" Class="whatsapp-appbar">
+        <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
+        <MudSpacer />
+        <MudAppBarSpacer />
+        <MudText Typo="Typo.h6" Class="ml-3">Conversas</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="Icons.Material.Filled.CameraAlt" Color="Color.Inherit" />
+        <MudIconButton Icon="Icons.Material.Filled.Search" Color="Color.Inherit" />
+        <MudIconButton Icon="Icons.Material.Filled.MoreVert" Color="Color.Inherit" />
+    </MudAppBar>
 
-<MudMainContent>
-    <MudContainer MaxWidth="MaxWidth.Large" Class="pa-0">
+    <div class="whatsapp-content">
         <!-- Filtros -->
-        <MudGrid Class="pa-4">
-            <MudItem xs="12">
-                <MudChipSet T="string" Filter>
-                    <MudChip T="string" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">Todas</MudChip>
-                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Não lidas</MudChip>
-                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Favoritos</MudChip>
-                    <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Grupos</MudChip>
-                </MudChipSet>
-            </MudItem>
-        </MudGrid>
+        <div class="whatsapp-filters">
+            <MudGrid Class="pa-4 ma-0">
+                <MudItem xs="12">
+                    <MudChipSet T="string" Filter>
+                        <MudChip T="string" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">Todas</MudChip>
+                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Não lidas</MudChip>
+                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Favoritos</MudChip>
+                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Grupos</MudChip>
+                    </MudChipSet>
+                </MudItem>
+            </MudGrid>
+        </div>
 
         <!-- Conversas Arquivadas -->
-        <MudListItem T="string" @onclick="() => HandleArchivedClick()">
+        <MudListItem T="string" @onclick="() => HandleArchivedClick()" Class="whatsapp-archived">
             <MudIcon Icon="Icons.Material.Filled.Archive" Color="Color.Default" />
             <MudText Class="ml-3">Arquivadas</MudText>
             <MudSpacer />
@@ -39,7 +41,7 @@
         <MudDivider />
 
         <!-- Lista de Conversas -->
-        <MudList T="User" Class="pa-0" Style="height: calc(100vh - 200px); overflow-y: auto;">
+        <MudList T="User" Class="pa-0 whatsapp-list">
             @foreach (var user in Users)
             {
                 <MudListItem @onclick="() => HandleUserClick(user)">
@@ -69,96 +71,48 @@
                 Class="fab-bottom-right"
                 Icon="Icons.Material.Filled.Chat">
         </MudFab>
-    </MudContainer>
-</MudMainContent>
+    </div>
 
-<!-- Menu Inferior -->
-<MudBottomNavigation Breakpoint="Breakpoint.None" 
-                     Color="Color.Primary" 
-                     Border="true" 
-                     Class="elevation-2">
-    
-    <!-- Atualizações -->
-    <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
-                      IconColor="Color.Default"
-                      Title="Atualizações" />
-    
-    <!-- Ligações -->
-    <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
-                      IconColor="Color.Default"
-                      Title="Ligações" />
-    
-    <!-- Comunidades -->
-    <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
-                      IconColor="Color.Default"
-                      Title="Comunidades" />
-    
-    <!-- Conversas -->
-    <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
-                      IconColor="Color.Primary"
-                      Title="Conversas" />
-    
-    <!-- Configurações -->
-    <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
-                      IconColor="Color.Default"
-                      Title="Configurações" />
+    <!-- Menu Inferior -->
+    <MudBottomNavigation Breakpoint="Breakpoint.None" 
+                         Color="Color.Primary" 
+                         Border="true" 
+                         Class="elevation-2 whatsapp-bottom-nav">
+        
+        <!-- Atualizações -->
+        <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
+                          IconColor="Color.Default"
+                          Title="Atualizações" />
+        
+        <!-- Ligações -->
+        <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
+                          IconColor="Color.Default"
+                          Title="Ligações" />
+        
+        <!-- Comunidades -->
+        <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
+                          IconColor="Color.Default"
+                          Title="Comunidades" />
+        
+        <!-- Conversas -->
+        <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
+                          IconColor="Color.Primary"
+                          Title="Conversas" />
+        
+        <!-- Configurações -->
+        <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
+                          IconColor="Color.Default"
+                          Title="Configurações" />
 
-</MudBottomNavigation>
+    </MudBottomNavigation>
+</div>
 
 @code {
     private List<User> Users = new List<User>();
 
     protected override void OnInitialized()
     {
-        GenerateFakeUsers();
-    }
-
-    private void GenerateFakeUsers()
-    {
-        // Dados fake conforme o print
-        Users.Add(new User 
-        { 
-            Id = 1, 
-            Phone = "Khalil Dev", 
-            LastMessage = "yy3-97f-d5p-Ca7",
-            LastMessageDate = DateTime.Now.AddDays(-1)
-        });
-
-        Users.Add(new User 
-        { 
-            Id = 2, 
-            Phone = "Khalil PLO5", 
-            LastMessage = "Teoria 3 H + 2 L",
-            LastMessageDate = new DateTime(2025, 11, 18)
-        });
-
-        Users.Add(new User 
-        { 
-            Id = 3, 
-            Phone = "Khalil IA's", 
-            LastMessage = "https://chat.whatsapp.com/GNQjOSxPsqn8...",
-            LastMessageDate = new DateTime(2025, 11, 16)
-        });
-
-        Users.Add(new User 
-        { 
-            Id = 4, 
-            Phone = "Canal de cortes", 
-            LastMessage = "https://www.instagram.com/reeI/DMly-czxNUG/?igsh=NGVjZmR...",
-            LastMessageDate = new DateTime(2025, 8, 5)
-        });
-
-        // // Adicionar mais usuários para testar o scroll
-        // for (int i = 5; i <= 20; i++)
-        // {
-        //     Users.Add(new User 
-        //     { 
-        //         Id = i, 
-        //         Phone = $"Contato {i}", 
-        //         LastMessage = $"Mensagem de exemplo {i}",
-        //         LastMessageDate = DateTime.Now.AddDays(-i)
-        //     });
-        // }
+        Users = User.GetFakeUsers(false);
     }
 
     private string GetInitials(string phone)
@@ -198,19 +152,54 @@
         // Lógica para abrir conversa com o usuário
     }
 
-    public class User
-    {
-        public int Id { get; set; }
-        public string Phone { get; set; } = string.Empty;
-        public string LastMessage { get; set; } = string.Empty;
-        public DateTime LastMessageDate { get; set; }
-    }
+    
 }
 
 <style>
+.whatsapp-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.whatsapp-appbar {
+    flex-shrink: 0;
+    z-index: 1100;
+}
+
+.whatsapp-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.whatsapp-filters {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--mud-palette-lines-default);
+}
+
+.whatsapp-archived {
+    flex-shrink: 0;
+}
+
+.whatsapp-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.whatsapp-bottom-nav {
+    flex-shrink: 0;
+    z-index: 1100;
+}
+
 .fab-bottom-right {
     position: fixed;
-    bottom: 24px;
+    bottom: 88px;
     right: 24px;
     z-index: 1000;
 }
