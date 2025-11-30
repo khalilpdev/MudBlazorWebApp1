@@ -3,45 +3,43 @@
 
 @page "/whatsapp"
 
-<div class="whatsapp-page">
-    <MudAppBar Elevation="1" Class="whatsapp-appbar">
-        <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
-        <MudSpacer />
-        <MudAppBarSpacer />
-        <MudText Typo="Typo.h6" Class="ml-3">Conversas</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="Icons.Material.Filled.CameraAlt" Color="Color.Inherit" />
-        <MudIconButton Icon="Icons.Material.Filled.Search" Color="Color.Inherit" />
-        <MudIconButton Icon="Icons.Material.Filled.MoreVert" Color="Color.Inherit" />
-    </MudAppBar>
+<MudAppBar Elevation="1">
+    <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
+    <MudSpacer />
+    <MudAppBarSpacer />
+    <MudText Typo="Typo.h6" Class="ml-3">Conversas</MudText>
+    <MudSpacer />
+    <MudIconButton Icon="Icons.Material.Filled.CameraAlt" Color="Color.Inherit" />
+    <MudIconButton Icon="Icons.Material.Filled.Search" Color="Color.Inherit" />
+    <MudIconButton Icon="Icons.Material.Filled.MoreVert" Color="Color.Inherit" />
+</MudAppBar>
 
-    <div class="whatsapp-content">
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="pa-0 pb-20">
         <!-- Filtros -->
-        <div class="whatsapp-filters">
-            <MudGrid Class="pa-4 ma-0">
-                <MudItem xs="12">
-                    <MudChipSet T="string" Filter>
-                        <MudChip T="string" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">Todas</MudChip>
-                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Não lidas</MudChip>
-                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Favoritos</MudChip>
-                        <MudChip T="string" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Grupos</MudChip>
-                    </MudChipSet>
-                </MudItem>
-            </MudGrid>
-        </div>
+        <MudGrid Class="pa-4">
+            <MudItem xs="12">
+                <MudChipSet T="string" Filter>
+                    <MudChip Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">Todas</MudChip>
+                    <MudChip Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Não lidas</MudChip>
+                    <MudChip Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Favoritos</MudChip>
+                    <MudChip Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Grupos</MudChip>
+                </MudChipSet>
+            </MudItem>
+        </MudGrid>
 
         <!-- Conversas Arquivadas -->
-        <MudListItem T="string" @onclick="() => HandleArchivedClick()" Class="whatsapp-archived">
+        <MudListItem T="string" @onclick="() => HandleArchivedClick()">
             <MudIcon Icon="Icons.Material.Filled.Archive" Color="Color.Default" />
             <MudText Class="ml-3">Arquivadas</MudText>
             <MudSpacer />
-            <MudBadge Color="Color.Primary" Size="Size.Small">66</MudBadge>
+            @* <MudBadge Color="Color.Primary" Size="Size.Small">66</MudBadge> *@
         </MudListItem>
 
         <MudDivider />
 
         <!-- Lista de Conversas -->
-        <MudList T="User" Class="pa-0 whatsapp-list">
+        <MudList T="User" Class="pa-0" Style="height: calc(100vh - 350px); overflow-y: auto;">
             @foreach (var user in Users)
             {
                 <MudListItem @onclick="() => HandleUserClick(user)">
@@ -71,44 +69,44 @@
                 Class="fab-bottom-right"
                 Icon="Icons.Material.Filled.Chat">
         </MudFab>
-    </div>
+    </MudContainer>
+</MudMainContent>
 
-    <!-- Menu Inferior -->
-    <MudBottomNavigation Breakpoint="Breakpoint.None" 
-                         Color="Color.Primary" 
-                         Border="true" 
-                         Class="elevation-2 whatsapp-bottom-nav">
-        
-        <!-- Atualizações -->
-        <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
-                          IconColor="Color.Default"
-                          Title="Atualizações" />
-        
-        <!-- Ligações -->
-        <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
-                          IconColor="Color.Default"
-                          Title="Ligações" />
-        
-        <!-- Comunidades -->
-        <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
-                          IconColor="Color.Default"
-                          Title="Comunidades" />
-        
-        <!-- Conversas -->
-        <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
-                          IconColor="Color.Primary"
-                          Title="Conversas" />
-        
-        <!-- Configurações -->
-        <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
-                          IconColor="Color.Default"
-                          Title="Configurações" />
+<!-- Menu Inferior -->
+<MudBottomNavigation Breakpoint="Breakpoint.None" 
+                     Color="Color.Primary" 
+                     Border="true">
+    
+    <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
+                      IconColor="@(_selectedTab == 0 ? Color.Primary : Color.Default)"
+                      Title="Atualizações"
+                      OnClick="@(() => OnTabClick(0))" />
+    
+    <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
+                      IconColor="@(_selectedTab == 1 ? Color.Primary : Color.Default)"
+                      Title="Ligações"
+                      OnClick="@(() => OnTabClick(1))" />
+    
+    <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
+                      IconColor="@(_selectedTab == 2 ? Color.Primary : Color.Default)"
+                      Title="Comunidades"
+                      OnClick="@(() => OnTabClick(2))" />
+    
+    <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
+                      IconColor="@(_selectedTab == 3 ? Color.Primary : Color.Default)"
+                      Title="Conversas"
+                      OnClick="@(() => OnTabClick(3))" />
+    
+    <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
+                      IconColor="@(_selectedTab == 4 ? Color.Primary : Color.Default)"
+                      Title="Configurações"
+                      OnClick="@(() => OnTabClick(4))" />
 
-    </MudBottomNavigation>
-</div>
+</MudBottomNavigation>
 
 @code {
     private List<User> Users = new List<User>();
+    private int _selectedTab = 3; // Conversas como padrão
 
     protected override void OnInitialized()
     {
@@ -152,56 +150,19 @@
         // Lógica para abrir conversa com o usuário
     }
 
-    
+    private void OnTabClick(int tabIndex)
+    {
+        _selectedTab = tabIndex;
+        // Adicione aqui a lógica para navegar entre as páginas
+    }
 }
 
 <style>
-.whatsapp-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.whatsapp-appbar {
-    flex-shrink: 0;
-    z-index: 1100;
-}
-
-.whatsapp-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-}
-
-.whatsapp-filters {
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--mud-palette-lines-default);
-}
-
-.whatsapp-archived {
-    flex-shrink: 0;
-}
-
-.whatsapp-list {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.whatsapp-bottom-nav {
-    flex-shrink: 0;
-    z-index: 1100;
-}
-
 .fab-bottom-right {
     position: fixed;
-    bottom: 88px;
+    bottom: 80px;
     right: 24px;
-    z-index: 1000;
+    z-index: 999;
 }
 
 .mud-list {
@@ -215,5 +176,13 @@
 .mud-list-item-secondary-content {
     flex-shrink: 0;
     margin-left: auto;
+}
+
+.mud-bottom-navigation {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
