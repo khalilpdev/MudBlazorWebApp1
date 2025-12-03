@@ -1,7 +1,4 @@
-﻿@using System.Collections.Generic
-@using Microsoft.AspNetCore.Components
-
-@page "/whatsapp"
+﻿@page "/whatsapp"
 
 <MudAppBar Elevation="1">
     <MudIconButton Icon="Icons.Material.Filled.Menu" Color="Color.Inherit" />
@@ -64,45 +61,62 @@
         </MudList>
 
         <!-- Botão Nova Conversa -->
-        <MudFab Color="Color.Primary" 
-                Size="Size.Large" 
+        <MudFab Color="Color.Primary"
+                Size="Size.Large"
                 Class="fab-bottom-right"
-                Icon="Icons.Material.Filled.Chat">
+                Icon="Icons.Material.Filled.Add"
+                OnClick="HandleNewChat">
         </MudFab>
     </MudContainer>
 </MudMainContent>
 
-<!-- Menu Inferior -->
-<MudBottomNavigation Breakpoint="Breakpoint.None" 
-                     Color="Color.Primary" 
-                     Border="true">
+<!-- Menu Inferior FIXO - Com fundo azul -->
+<MudAppBar Position="Position.Fixed" 
+           Bottom="true" 
+           Elevation="2"
+           Color="Color.Primary"
+           Class="bottom-nav-bar">
     
-    <MudBottomNavItem Icon="Icons.Material.Filled.Update" 
-                      IconColor="@(_selectedTab == 0 ? Color.Primary : Color.Default)"
-                      Title="Atualizações"
-                      OnClick="@(() => OnTabClick(0))" />
+    <div class="bottom-nav-container">
+        
+        <div class="nav-item @(_selectedTab == 0 ? "active" : "")" @onclick="@(() => OnTabClick(0))">
+            <MudIcon Icon="@(_selectedTab == 0 ? Icons.Material.Filled.Update : Icons.Material.Outlined.Update)" 
+                     Size="Size.Medium" 
+                     Class="nav-icon" />
+            <MudText Typo="Typo.caption" Class="nav-text">Atualizações</MudText>
+        </div>
+        
+        <div class="nav-item @(_selectedTab == 1 ? "active" : "")" @onclick="@(() => OnTabClick(1))">
+            <MudIcon Icon="@(_selectedTab == 1 ? Icons.Material.Filled.Call : Icons.Material.Outlined.Call)" 
+                     Size="Size.Medium" 
+                     Class="nav-icon" />
+            <MudText Typo="Typo.caption" Class="nav-text">Ligações</MudText>
+        </div>
+        
+        <div class="nav-item @(_selectedTab == 2 ? "active" : "")" @onclick="@(() => OnTabClick(2))">
+            <MudIcon Icon="@(_selectedTab == 2 ? Icons.Material.Filled.Groups : Icons.Material.Outlined.Groups)" 
+                     Size="Size.Medium" 
+                     Class="nav-icon" />
+            <MudText Typo="Typo.caption" Class="nav-text">Comunidades</MudText>
+        </div>
+        
+        <div class="nav-item @(_selectedTab == 3 ? "active" : "")" @onclick="@(() => OnTabClick(3))">
+            <MudIcon Icon="@(_selectedTab == 3 ? Icons.Material.Filled.Chat : Icons.Material.Outlined.Chat)" 
+                     Size="Size.Medium" 
+                     Class="nav-icon" />
+            <MudText Typo="Typo.caption" Class="nav-text">Conversas</MudText>
+        </div>
+        
+        <div class="nav-item @(_selectedTab == 4 ? "active" : "")" @onclick="@(() => OnTabClick(4))">
+            <MudIcon Icon="@(_selectedTab == 4 ? Icons.Material.Filled.Settings : Icons.Material.Outlined.Settings)" 
+                     Size="Size.Medium" 
+                     Class="nav-icon" />
+            <MudText Typo="Typo.caption" Class="nav-text">Configurações</MudText>
+        </div>
     
-    <MudBottomNavItem Icon="Icons.Material.Filled.Call" 
-                      IconColor="@(_selectedTab == 1 ? Color.Primary : Color.Default)"
-                      Title="Ligações"
-                      OnClick="@(() => OnTabClick(1))" />
-    
-    <MudBottomNavItem Icon="Icons.Material.Filled.Groups" 
-                      IconColor="@(_selectedTab == 2 ? Color.Primary : Color.Default)"
-                      Title="Comunidades"
-                      OnClick="@(() => OnTabClick(2))" />
-    
-    <MudBottomNavItem Icon="Icons.Material.Filled.Chat" 
-                      IconColor="@(_selectedTab == 3 ? Color.Primary : Color.Default)"
-                      Title="Conversas"
-                      OnClick="@(() => OnTabClick(3))" />
-    
-    <MudBottomNavItem Icon="Icons.Material.Filled.Settings" 
-                      IconColor="@(_selectedTab == 4 ? Color.Primary : Color.Default)"
-                      Title="Configurações"
-                      OnClick="@(() => OnTabClick(4))" />
+    </div>
 
-</MudBottomNavigation>
+</MudAppBar>
 
 @code {
     private List<User> Users = new List<User>();
@@ -117,11 +131,11 @@
     {
         if (string.IsNullOrEmpty(phone))
             return "??";
-        
+
         var parts = phone.Split(' ');
         if (parts.Length >= 2)
             return $"{parts[0][0]}{parts[1][0]}".ToUpper();
-        
+
         return phone.Length >= 2 ? phone.Substring(0, 2).ToUpper() : phone.ToUpper();
     }
 
@@ -150,39 +164,169 @@
         // Lógica para abrir conversa com o usuário
     }
 
+    private void HandleNewChat()
+    {
+        // Lógica para criar nova conversa
+    }
+
     private void OnTabClick(int tabIndex)
     {
         _selectedTab = tabIndex;
-        // Adicione aqui a lógica para navegar entre as páginas
+        StateHasChanged();
     }
 }
 
 <style>
-.fab-bottom-right {
-    position: fixed;
-    bottom: 80px;
-    right: 24px;
-    z-index: 999;
-}
+    /* Botão flutuante */
+    .fab-bottom-right {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 1200;
+        background-color: #00A884 !important;
+        color: white !important;
+    }
 
-.mud-list {
-    scroll-behavior: smooth;
-}
+    .fab-bottom-right:hover {
+        background-color: #008F72 !important;
+    }
 
-.mud-list-item-content {
-    min-width: 0;
-}
+    /* Estilos gerais */
+    .mud-list {
+        scroll-behavior: smooth;
+    }
 
-.mud-list-item-secondary-content {
-    flex-shrink: 0;
-    margin-left: auto;
-}
+    .mud-list-item-content {
+        min-width: 0;
+    }
 
-.mud-bottom-navigation {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
+    .mud-list-item-secondary-content {
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    /* BARRA INFERIOR FIXA - COM FUNDO AZUL */
+    .bottom-nav-bar {
+        background-color: var(--mud-palette-primary) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        height: 56px !important;
+        min-height: 56px !important;
+        max-height: 56px !important;
+        padding: 0 !important;
+        z-index: 1100;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start !important;
+        margin-left: inherit;
+    }
+
+    .bottom-nav-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Itens da navegação - CORES PARA FUNDO AZUL */
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: 56px;
+        min-width: 0;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+        padding: 0 4px;
+    }
+
+    .nav-item:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Ícones e textos ativos - branco no fundo azul */
+    .nav-item.active .nav-icon {
+        color: #FFFFFF !important; /* Branco para ativo em fundo azul */
+    }
+
+    .nav-item.active .nav-text {
+        color: #FFFFFF !important; /* Branco para ativo em fundo azul */
+        font-weight: 500 !important;
+    }
+
+    /* Ícones e textos inativos - branco com opacidade */
+    .nav-icon {
+        font-size: 24px !important;
+        color: rgba(255, 255, 255, 0.7) !important; /* Branco com 70% opacidade */
+        margin-bottom: 2px;
+        transition: color 0.2s ease;
+    }
+
+    .nav-text {
+        font-size: 0.75rem !important;
+        line-height: 1rem !important;
+        color: rgba(255, 255, 255, 0.7) !important; /* Branco com 70% opacidade */
+        text-align: center;
+        transition: color 0.2s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    /* Hover nos itens inativos */
+    .nav-item:hover .nav-icon,
+    .nav-item:hover .nav-text {
+        color: rgba(255, 255, 255, 0.9) !important; /* Branco com mais opacidade no hover */
+    }
+
+    /* Ajusta o padding do conteúdo principal */
+    .mud-main-content {
+        padding-bottom: 56px !important;
+    }
+
+    /* Container principal */
+    .mud-container-maxwidth-large.pa-0.pb-20 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Ajuste dos itens internos para alinhamento */
+    .mud-grid.pa-4 {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* List item arquivadas - alinhamento */
+    .mud-list-item {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* Lista de conversas - alinhamento */
+    .mud-list.pa-0 {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Garante que não haja margens extras */
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    /* Remove qualquer padding default */
+    .mud-appbar {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 </style>
